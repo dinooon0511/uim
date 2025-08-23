@@ -1,0 +1,496 @@
+@font-face {
+  font-family: system-ui;
+  src: local('system-ui');
+}
+:root {
+  --bg: #232323;
+  --card: #1b1b1b80;
+  --accent: #f1ff6a;
+  --text: #f0f0f0;
+  --muted: #b0b0b0;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial;
+  line-height: 1.35;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  cursor: pointer;
+  border: none;
+}
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 28px;
+  border: 1px solid #333;
+  background: #222;
+  color: var(--text);
+  outline: none;
+  font-size: 16px;
+}
+.btn {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 28px;
+  background: var(--accent);
+  color: #000;
+  font-weight: 700;
+  font-size: 16px;
+}
+.btn-outline {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 28px;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid #444;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+.card {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 24px;
+  padding: 22px;
+  backdrop-filter: blur(12px);
+  background: radial-gradient(120% 120% at 0% 0%, #1f1f1f88, #101010aa);
+  border: 1px solid #2a2a2a;
+}
+.title {
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+.desc {
+  font-size: 12px;
+  color: var(--muted);
+}
+.stepper {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #333;
+}
+.dot.active {
+  background: var(--accent);
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.logo img {
+  width: 64px;
+  height: 64px;
+  opacity: 0.9;
+}
+.logo h1 {
+  font-size: 20px;
+  margin: 8px 0 0;
+}
+.row {
+  display: flex;
+  gap: 12px;
+}
+.toggle {
+  display: flex;
+  gap: 8px;
+}
+.toggle button {
+  flex: 1;
+  border-radius: 24px;
+  padding: 12px 0;
+  background: #222;
+  border: 1px solid #333;
+  color: #fff;
+}
+.toggle button.active {
+  background: var(--accent);
+  color: #000;
+}
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.profile-card {
+  max-width: 420px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.tabbar {
+  position: fixed;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+.tabbar .bar {
+  background: #1b1b1baa;
+  border: 1px solid #2a2a2a;
+  border-radius: 18px;
+  padding: 8px 12px;
+  display: flex;
+  gap: 20px;
+}
+.tabbar .bar a {
+  color: #fff;
+  opacity: 0.8;
+}
+
+/* Фон на всю страницу */
+.bg-cover {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Предустановленные фоны (поменяй имена/пути под свои картинки) */
+.bg-login {
+  background-image: url('/img/bg/tennis.jpg');
+}
+.bg-register {
+  background-image: url('/img/bg/tennis.jpg');
+}
+.bg-onboarding {
+  background-image: url('/img/bg/metal.jpg');
+}
+
+/* Эффект “стекла” для карточек */
+.glass {
+  backdrop-filter: blur(12px);
+  background: #11111188;
+  border: 1px solid #2a2a2a;
+}
+
+/* (необязательно) Сделать .card стеклянной, если у тебя есть класс .card */
+.card.glass {
+  background: #11111188 !important;
+  border: 1px solid #2a2a2a !important;
+}
+
+/* --- Splash --- */
+.splash {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 16px;
+  background: var(--bg);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 36vh; /* можно подогнать под свой экран */
+}
+
+.brand img {
+  width: 84px; /* подогнать 72–96px */
+  height: 84px;
+  object-fit: contain;
+}
+
+.brand-title {
+  margin-top: 12px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: #fff;
+}
+
+/* блок кнопок прижат к низу */
+.actions {
+  position: sticky;
+  bottom: 10vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* точные стили кнопок под макет */
+.btn-ghost-lime {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 28px;
+  background: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(231, 255, 122, 0.7); /* лайм-обводка */
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.btn-lime {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 28px;
+  background: #e7ff7a; /* лайм-заливка */
+  color: #0b0b0b;
+  border: 1px solid #e7ff7a;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ===== Login (pixel-perfect) ===== */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px;
+}
+
+/* верхний/нижний слоганы */
+.login-hero-top,
+.login-hero-bottom {
+  font-weight: 100;
+  letter-spacing: 0.18em;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  opacity: 0.95;
+  font-size: 14px;
+}
+.login-hero-top {
+  align-self: center;
+  margin-top: 12px;
+}
+.login-hero-bottom {
+  align-self: center;
+  margin-bottom: 10px;
+}
+
+/* карточка */
+.login-card {
+  width: min(92vw, 440px);
+  border-radius: 28px;
+  padding: 26px 22px 22px;
+  border: 0px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(
+    160% 140% at 0% 0%,
+    rgba(255, 255, 255, 0.22),
+    rgba(17, 17, 17, 0.35)
+  );
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #1c1a16; /* тёмный текст внутри карточки */
+}
+.login-card.glass {
+  backdrop-filter: blur(18px);
+}
+
+.login-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5vh;
+}
+.login-brand {
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+}
+.login-link {
+  color: #eaeaea;
+  opacity: 0.5;
+  font-size: 10px;
+  text-decoration: none;
+}
+.login-link:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* заголовок */
+.login-title {
+  margin: 8px 0 12px;
+  font-size: 30px; /* подгоняй 36–44 для пиксельного совпадения */
+  font-weight: 700;
+  color: #1f1b17;
+}
+
+/* форма */
+.login-form {
+  display: grid;
+  gap: 14px;
+}
+
+/* пилюльные поля */
+.input-pill {
+  position: relative;
+  border-radius: 28px;
+  padding: 15px 14px 15px 56px; /* место под круглую иконку */
+  background: linear-gradient(180deg, #f2f2f2, #eaeaea);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.pill-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 #fff;
+}
+.pill-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #2a2723;
+  font-size: 16px;
+  font-weight: 600;
+}
+.pill-input::placeholder {
+  color: #9c9c9c;
+  font-weight: 600;
+}
+
+/* кнопка «Забыли?» внутри поля пароля */
+.forgot-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #fff;
+  color: #2a2723;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* примечание под полями */
+.login-note {
+  margin: 2px 8px 10px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: rgba(28, 26, 22, 0.55);
+}
+
+/* кнопка «далее» — круг снизу справа */
+.login-go-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+.login-go {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #171311;
+  color: #fff;
+  font-size: 34px;
+  line-height: 64px;
+  border: none;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.login-go .arrow {
+  position: relative;
+  top: -2px;
+  display: inline-block;
+}
+
+/* маленькая «таблетка» слева от круга — декоративная точка */
+.login-go::before {
+  content: '';
+  position: absolute;
+  left: -22px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #171311;
+  opacity: 0.9;
+}
+
+/* ошибки */
+.login-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin: -4px 0 6px 8px;
+}
+
+/* Нижняя строка: текст + svg-кнопка */
+.login-bottom-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+/* Текст согласия — светлый, как на макете */
+.login-card .login-note {
+  margin: 0 8px 0 8px;
+  font-size: 7px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.3);
+  flex: 1; /* занимает всё слева от кнопки */
+}
+
+/* Кнопка со svg */
+.login-go-img {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  line-height: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-go-img img {
+  width: clamp(64px, 18vw, 96px); /* масштаб под экран; правь при необходимости */
+  height: auto;
+  display: block;
+}
+
+/* Маленький текст под строкой */
+.login-more {
+  text-align: center;
+  margin-top: 14px;
+  font-size: 8px;
+  color: rgba(28, 26, 22, 0.6);
+}
+
+/* (оставь остальной CSS как есть; классы .login-go и пр. больше не используются) */

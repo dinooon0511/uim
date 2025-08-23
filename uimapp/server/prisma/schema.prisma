@@ -1,0 +1,38 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  phone         String   @unique
+  username      String   @unique
+  passwordHash  String
+  createdAt     DateTime @default(now())
+  profile       Profile?
+}
+
+model Profile {
+  id               String   @id @default(cuid())
+  user             User     @relation(fields: [userId], references: [id])
+  userId           String   @unique
+  age              Int?
+  heightCm         Int?
+  weightKg         Float?
+  sex              String?  // 'male' | 'female'
+  activityLevel    String?  // 'sedentary' | 'light' | 'moderate' | 'high'
+  goal             String?  // 'lose' | 'maintain' | 'gain'
+  habits           String?  // JSON string of selected habits
+  calorieTarget    Int?
+  proteinTarget    Int?
+  fatTarget        Int?
+  carbTarget       Int?
+  onboardingComplete Boolean @default(false)
+  avatarUrl        String?
+  updatedAt        DateTime @updatedAt
+}
