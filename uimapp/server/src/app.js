@@ -45,6 +45,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/me', meRoutes);
 app.use('/api/onboarding', onboardingRoutes);
 
+// какие таблицы есть в public
 app.get('/api/debug/tables', async (_req, res) => {
   try {
     const rows = await sql`SELECT tablename FROM pg_tables WHERE schemaname='public'`;
@@ -53,6 +54,15 @@ app.get('/api/debug/tables', async (_req, res) => {
     console.error(e);
     res.status(500).json({ error: String(e) });
   }
+});
+
+// какие роуты зарегистрированы в Express
+app.get('/api/debug/routes', (_req, res) => {
+  const routes = [];
+  app._router.stack.forEach((m) => {
+    if (m.route && m.route.path) routes.push({ path: m.route.path, methods: m.route.methods });
+  });
+  res.json(routes);
 });
 
 // 5) ОБЯЗАТЕЛЬНО экспорт без listen (для Vercel)
