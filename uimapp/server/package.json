@@ -9,13 +9,13 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js",
-    "prestart": "prisma migrate deploy",
-    "start": "node src/index.js",
-    "postinstall": "prisma generate"
+    "prisma:generate": "npx prisma generate",
+    "prestart": "npx prisma migrate deploy",
+    "start": "node src/index.js"
   },
   "dependencies": {
-    "@prisma/client": "^5.12.1",
-    "prisma": "^5.12.1",
+    "@prisma/client": "5.12.1",
+    "prisma": "5.12.1",
     "argon2": "^0.31.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
