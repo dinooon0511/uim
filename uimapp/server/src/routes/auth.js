@@ -1,7 +1,7 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
-const argon2 = require('argon2');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -32,7 +32,7 @@ function issueToken(res, userId) {
 router.post('/register', async (req, res) => {
   try {
     const data = registerSchema.parse(req.body);
-    const passwordHash = await argon2.hash(data.password);
+    const passwordHash = await bcrypt.hash(data.password, 12);
     const user = await prisma.user.create({
       data: {
         phone: data.phone,
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
     const data = loginSchema.parse(req.body);
     const user = await prisma.user.findUnique({ where: { phone: data.phone } });
     if (!user) return res.status(400).json({ error: 'user not found' });
-    const ok = await argon2.verify(user.passwordHash, data.password);
+    const ok = await bcrypt.compare(data.password, user.passwordHash);
     if (!ok) return res.status(400).json({ error: 'wrong password' });
     issueToken(res, user.id);
     return res.json({ ok: true });
