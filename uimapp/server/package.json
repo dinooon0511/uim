@@ -9,12 +9,14 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js",
-    "prisma:generate": "npx prisma generate",
-    "prestart": "npx prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy",
+    "postinstall": "prisma generate",
     "start": "node src/index.js"
   },
   "dependencies": {
     "@prisma/client": "5.12.1",
+    "prisma": "5.12.1",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -22,7 +24,6 @@
     "express": "^4.19.2",
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
-    "prisma": "5.12.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
