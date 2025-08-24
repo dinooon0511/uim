@@ -3,8 +3,10 @@ const app = require('../src/app');
 
 function setCors(res, origin, req) {
   if (!origin) return;
+  // Разрешаем точный фронт и (временно) любые *.vercel.app для диагностики
   const allowAnyVercel = process.env.ALLOW_ANY_VERCEL === '1' && /\.vercel\.app$/.test(origin);
   const allowlist = [process.env.CLIENT_ORIGIN, 'http://localhost:5173'].filter(Boolean);
+
   if (allowAnyVercel || allowlist.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
     res.setHeader('Vary', 'Origin');
@@ -20,15 +22,15 @@ function setCors(res, origin, req) {
 module.exports = (req, res) => {
   const origin = req.headers.origin;
 
-  // отдаем CORS-заголовки для всех ответов
+  // Всегда ставим CORS заголовки на ответ
   setCors(res, origin, req);
 
-  // жёсткая обработка префлайта (до Express)
+  // Жёстко обрабатываем префлайт ДО Express
   if (req.method === 'OPTIONS') {
     res.statusCode = 204;
     return res.end();
   }
 
-  // дальше — твой Express-приложение
+  // Дальше — само Express-приложение
   return app(req, res);
 };
