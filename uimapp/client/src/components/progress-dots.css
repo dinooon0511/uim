@@ -1,0 +1,40 @@
+/* Индикатор привязан к карточке */
+.steps-wrap {
+  position: absolute;
+  /* «вытаскиваем» на пару пикселей над верхним краем карточки */
+  top: -26px;
+  left: 22px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.step-dot {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: transparent;
+}
+
+.step-dot.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.step-dash {
+  flex: 1;
+  height: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  margin: 0 12px;
+  transform: translateY(-1px);
+}

@@ -1,65 +1,81 @@
-const express = require('express');
-const { z } = require('zod');
-const { authRequired } = require('../middleware/auth');
-const { sql } = require('../db');
+// src/routes/onboarding.js
+import { Router } from 'express';
+import { authRequired } from '../mw/auth.js';
+import { query } from '../db.js';
 
-const router = express.Router();
+const r = Router();
 
-const schema = z.object({
-  age: z.number().int().min(10).max(100),
-  heightCm: z.number().int().min(80).max(250),
-  weightKg: z.number().min(25).max(350),
-  sex: z.enum(['male', 'female']),
-  activityLevel: z.enum(['sedentary', 'light', 'moderate', 'high']),
-  goal: z.enum(['lose', 'maintain', 'gain']),
-  habits: z.array(z.string()).optional().default([]),
-});
+/**
+ * Сохранить/обновить профиль
+ * body: { age,height,weight,gender,goals[],activity,habits[],plan,name? }
+ */
+r.post('/complete', authRequired, async (req, res) => {
+  const uid = req.user.id;
+  const {
+    age,
+    height,
+    weight,
+    gender,
+    goals = [],
+    activity = null,
+    habits = [],
+    plan = null,
+    name = null,
+  } = req.body || {};
 
-function computeTargets({ sex, age, heightCm, weightKg, activityLevel, goal }) {
-  const s = sex === 'male' ? 5 : -161;
-  const BMR = Math.round(10 * weightKg + 6.25 * heightCm - 5 * age + s);
-  const factors = { sedentary: 1.2, light: 1.375, moderate: 1.55, high: 1.725 };
-  let TDEE = Math.round(BMR * (factors[activityLevel] || 1.2));
-  if (goal === 'lose') TDEE = Math.round(TDEE * 0.85);
-  if (goal === 'gain') TDEE = Math.round(TDEE * 1.1);
-  const proteinTarget = Math.round((TDEE * 0.3) / 4);
-  const fatTarget = Math.round((TDEE * 0.3) / 9);
-  const carbTarget = Math.round((TDEE * 0.4) / 4);
-  return {
-    calorie_target: TDEE,
-    protein_target: proteinTarget,
-    fat_target: fatTarget,
-    carb_target: carbTarget,
-  };
-}
-
-router.post('/', authRequired, async (req, res) => {
   try {
-    const data = schema.parse(req.body);
-    const macros = computeTargets(data);
-    await sql`
-      UPDATE profiles SET
-        age = ${data.age},
-        height_cm = ${data.heightCm},
-        weight_kg = ${data.weightKg},
-        sex = ${data.sex},
-        activity_level = ${data.activityLevel},
-        goal = ${data.goal},
-        habits = ${JSON.stringify(data.habits || [])},
-        calorie_target = ${macros.calorie_target},
-        protein_target = ${macros.protein_target},
-        fat_target = ${macros.fat_target},
-        carb_target = ${macros.carb_target},
-        onboarding_complete = true,
-        updated_at = now()
-      WHERE user_id = ${req.user.id}
-    `;
-    const r = (await sql`SELECT * FROM profiles WHERE user_id = ${req.user.id}`)[0];
-    res.json({ ok: true, profile: r });
+    // Обновим имя пользователя (опционально)
+    if (name) {
+      await query(`UPDATE users SET name=$2 WHERE id=$1`, [uid, name]);
+    }
+
+    // Upsert профиля
+    await query(
+      `
+      INSERT INTO profiles (user_id, age, height, weight, gender, goals, activity, habits, plan, updated_at)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9, now())
+      ON CONFLICT (user_id) DO UPDATE
+         SET age=EXCLUDED.age,
+             height=EXCLUDED.height,
+             weight=EXCLUDED.weight,
+             gender=EXCLUDED.gender,
+             goals=EXCLUDED.goals,
+             activity=EXCLUDED.activity,
+             habits=EXCLUDED.habits,
+             plan=EXCLUDED.plan,
+             updated_at=now()
+    `,
+      [
+        uid,
+        age,
+        height,
+        weight,
+        gender,
+        JSON.stringify(goals),
+        activity,
+        JSON.stringify(habits),
+        plan,
+      ],
+    );
+
+    res.json({ ok: true });
   } catch (e) {
     console.error(e);
-    res.status(400).json({ error: e?.message || 'bad request' });
+    res.status(500).json({ error: 'db_error' });
   }
 });
 
-module.exports = router;
+/** Получить профиль + базовую инфу о пользователе */
+r.get('/profile', authRequired, async (req, res) => {
+  const uid = req.user.id;
+  try {
+    const u = await query(`SELECT id, phone, name, created_at FROM users WHERE id=$1`, [uid]);
+    const p = await query(`SELECT * FROM profiles WHERE user_id=$1`, [uid]);
+    res.json({ user: u.rows[0] || null, profile: p.rows[0] || null });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'db_error' });
+  }
+});
+
+export default r;

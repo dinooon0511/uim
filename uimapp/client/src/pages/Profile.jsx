@@ -1,50 +1,95 @@
-import React, { useEffect, useState } from 'react'
-import { api } from '../api'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { getOnboarding, clearOnboarding } from '../lib/onboardingStore';
+import '../styles.css';
 
-export default function Profile(){
-  const [me, setMe] = useState(null)
-  const [err, setErr] = useState('')
-  useEffect(()=>{
-    api('/api/me').then(setMe).catch(e=>setErr(e.message))
-  },[])
+export default function Profile() {
+  const data = getOnboarding();
 
-  if (err) return <div className="center">{err}</div>
-  if (!me) return <div className="center">Загрузка…</div>
-
-  const p = me.profile || {}
   return (
-    <div className="center">
-      <div className="card profile-card">
-        <div style={{display:'flex', gap:16, alignItems:'center'}}>
-          <img src={p.avatarUrl || 'https://dummyimage.com/72x72/333/fff.png&text=U'} alt="avatar" style={{width:72,height:72,borderRadius:'50%'}}/>
+    <div className="profile-screen">
+      <header className="profile-head">
+        <div className="ph-left">
+          <div className="avatar">
+            <img src={data.photo || '/img/ava-placeholder.png'} alt="" />
+          </div>
           <div>
-            <div style={{fontWeight:700, fontSize:18}}>{me.username}</div>
-            <div style={{fontSize:12, color:'#aaa'}}>+{me.phone}</div>
+            <div className="ph-name">{data.name || 'Без имени'}</div>
+            <div className="ph-phone">{data.phone}</div>
           </div>
         </div>
 
-        <div style={{marginTop:16}} className="grid">
-          <div>Возраст: {p.age ?? '—'}</div>
-          <div>Рост: {p.heightCm ?? '—'} см</div>
-          <div>Вес: {p.weightKg ?? '—'} кг</div>
-          <div>Пол: {p.sex === 'female' ? 'Ж' : 'М'}</div>
-          <div>Цель: {p.goal}</div>
-          <div>Активность: {p.activityLevel}</div>
-          <div>Ккал/день: {p.calorieTarget ?? '—'}</div>
-          <div>Б: {p.proteinTarget ?? '—'}г · Ж: {p.fatTarget ?? '—'}г · У: {p.carbTarget ?? '—'}г</div>
-        </div>
+        <button className="ph-edit" onClick={() => alert('Позже тут будет редактирование')}>
+          Редактировать
+        </button>
+      </header>
 
-        <div className="tabbar">
-          <div className="bar">
-            <Link to="/profile">👤</Link>
-            <a title="Трекер">📅</a>
-            <a title="Финансы">💲</a>
-            <a title="Калории">🍽️</a>
-            <a title="Баллы">⭐</a>
+      <section className="profile-card">
+        <h3>Параметры</h3>
+        <div className="grid-2">
+          <div>
+            <b>Возраст:</b> {data.age ?? '—'}
+          </div>
+          <div>
+            <b>Рост:</b> {data.height ?? '—'} см
+          </div>
+          <div>
+            <b>Вес:</b> {data.weight ?? '—'} кг
+          </div>
+          <div>
+            <b>Пол:</b>{' '}
+            {data.gender === 'female' ? 'Женский' : data.gender === 'male' ? 'Мужской' : '—'}
           </div>
         </div>
+      </section>
+
+      <section className="profile-card">
+        <h3>Цели</h3>
+        <div className="chips">
+          {(data.goals || []).map((g) => (
+            <span key={g} className="chip">
+              {g}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <section className="profile-card">
+        <h3>Активность</h3>
+        <div>{data.activity || '—'}</div>
+      </section>
+
+      <section className="profile-card">
+        <h3>Привычки</h3>
+        <div className="chips">
+          {(data.habits || []).map((h) => (
+            <span key={h} className="chip">
+              {h}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <section className="profile-card">
+        <h3>Тариф</h3>
+        <div>
+          {{
+            pro: 'UIM.PRO',
+            trial: 'Пробный',
+            basic: 'Базовый',
+          }[data.plan] || '—'}
+        </div>
+      </section>
+
+      <div className="profile-actions">
+        <button
+          className="btn-ghost"
+          onClick={() => {
+            clearOnboarding();
+            location.reload();
+          }}>
+          Сбросить ответы
+        </button>
       </div>
     </div>
-  )
+  );
 }

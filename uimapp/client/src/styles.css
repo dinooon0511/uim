@@ -216,7 +216,6 @@ button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 36vh; /* можно подогнать под свой экран */
 }
 
 .brand img {
@@ -306,7 +305,7 @@ button {
     rgba(17, 17, 17, 0.35)
   );
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  color: #1c1a16; /* тёмный текст внутри карточки */
+  color: #1c1a16;
 }
 .login-card.glass {
   backdrop-filter: blur(18px);
@@ -494,3 +493,853 @@ button {
 }
 
 /* (оставь остальной CSS как есть; классы .login-go и пр. больше не используются) */
+
+/* фон экрана + центрирование */
+.auth-screen {
+  min-height: 100dvh;
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  font-family: 'Manrope', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* стеклянная карточка */
+.glass-card {
+  width: min(92vw, 440px);
+  border-radius: 28px;
+  padding: 26px 22px 22px;
+  border: 0px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(
+    160% 140% at 0% 0%,
+    rgba(255, 255, 255, 0.22),
+    rgba(17, 17, 17, 0.35)
+  );
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #1c1a16;
+}
+
+.reg-card {
+  padding-top: 56px;
+} /* место под индикатор */
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10vh;
+  height: 0px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  width: 22px;
+  height: 22px;
+}
+.brand-text {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.link-ghost {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.9;
+}
+.link-ghost:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.card-title {
+  margin: 10px 0 16px;
+  font-size: 36px;
+  line-height: 1.1;
+  color: #1b1b1b; /* как в макете — тёмный внутри стекла */
+  mix-blend-mode: luminosity;
+}
+
+/* форма */
+.auth-form {
+  position: relative;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.68);
+  border-radius: 9999px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.input-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) inset;
+  margin-right: 12px;
+  flex: 0 0 28px;
+}
+
+.uim-input {
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 16px;
+  color: #1c1c1c;
+}
+
+.policy {
+  margin: 10px 0 56px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* круглая кнопка-картинка справа внизу формы */
+.circle-img-btn {
+  position: absolute;
+  right: 8px;
+  bottom: -28px;
+  width: 58px;
+  height: 58px;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.circle-img-btn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.circle-img-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.hint {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* --- индикатор шагов (привязан к карточке) --- */
+.steps-wrap {
+  position: absolute;
+  top: -26px; /* вынос над карточкой; подрегулируй при желании */
+  left: 22px;
+  right: 22px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 3;
+}
+.step-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+.step-dot.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+}
+.step-dash {
+  flex: 1;
+  height: 2px;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  margin: 0 12px;
+  transform: translateY(-1px);
+}
+
+.glass-card {
+  position: relative;
+}
+.reg-card {
+  padding-top: 28px;
+}
+.policy-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+.policy {
+  margin: 0;
+  font-size: 8px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  flex: 1; /* текст занимает всё доступное */
+}
+.policy-btn {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.policy-btn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.auth-screen {
+  min-height: 100dvh;
+  background-size: cover;
+  background-position: center;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  font-family: 'Manrope', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.glass-card {
+  width: min(92vw, 440px);
+  border-radius: 28px;
+  padding: 26px 22px 22px;
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 0px solid rgba(255, 255, 255, 0.14);
+  background: radial-gradient(
+    160% 140% at 0% 0%,
+    rgba(255, 255, 255, 0.22),
+    rgba(17, 17, 17, 0.35)
+  );
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #1c1a16;
+}
+
+.reg-card {
+  padding-top: 28px;
+} /* индикатор вынесен над карточкой */
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark {
+  width: 22px;
+  height: 22px;
+}
+.brand-text {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.link-ghost {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.9;
+}
+.link-ghost:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.card-title {
+  margin: 10px 0 16px;
+  font-size: 36px;
+  line-height: 1.1;
+  color: #1b1b1b; /* как в макете — тёмный внутри стекла */
+  mix-blend-mode: luminosity;
+}
+
+/* === форма === */
+.auth-form {
+  position: relative;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.68);
+  border-radius: 9999px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.input-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 9999px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15) inset;
+  margin-right: 12px;
+  flex: 0 0 28px;
+}
+
+.uim-input {
+  outline: none;
+  border: none;
+  background: transparent;
+  width: 100%;
+  font-size: 16px;
+  color: #1c1c1c;
+}
+
+/* текст + кнопка — в один ряд */
+.policy-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+.policy {
+  margin: 0;
+  font-size: 8px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+  flex: 1; /* текст занимает доступную ширину */
+}
+.policy-btn {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.policy-btn img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hint {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 8px;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+:root {
+  --lime: #f3ff5a; /* ярко-лимонная из макета */
+  --black: #121212;
+  --muted: rgba(255, 255, 255, 0.85);
+}
+
+/* верхняя зона — логотип + прогресс */
+.onb-top {
+  width: min(480px, 92vw);
+  margin: 8px auto 18px;
+  position: relative;
+}
+.onb-logo {
+  display: block;
+  height: 28px;
+  margin: 0 0 14px 4px; /* чутка смещения как в макете */
+}
+
+/* шаги уже есть, просто опустим их чуть ниже логотипа */
+.steps-wrap {
+  position: relative;
+  top: -80px;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+}
+
+/* карточка анкеты — внутри стекла другое содержание */
+.onb-card {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+.onb-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.onb-cap {
+  font-weight: 500;
+  font-size: 15px;
+  opacity: 0.7;
+  letter-spacing: 0.2px;
+  color: var(--muted);
+}
+.onb-back {
+  background: none;
+  border: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+.onb-back:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.onb-title {
+  margin: 8px 0 18px;
+  font-size: 27px;
+  line-height: 1.15;
+  color: #fff;
+  letter-spacing: 0.2px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+/* поля — широкие, как в макете */
+.onb-input {
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 22px;
+  padding: 14px 16px;
+}
+.onb-input .uim-input {
+  font-size: 10px;
+  color: #1b1b1b;
+}
+.onb-input + .onb-input {
+  margin-top: 14px;
+}
+
+/* метка + сегменты для пола */
+.onb-field {
+  margin-top: 14px;
+}
+.onb-label {
+  margin: 10px 8px 10px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+}
+.segmented {
+  display: flex;
+  gap: 12px;
+}
+.seg {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #1a1a1a;
+  color: #fff;
+  border: 0;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.seg.active {
+  background: #fff;
+  color: #000;
+}
+
+/* большая лимонная кнопка */
+.cta-lime {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  margin-top: 28px;
+  background: var(--lime);
+  color: #000;
+  border: 0;
+  border-radius: 26px;
+  padding: 6px 18px 6px 18px;
+  font-weight: 600;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+}
+.cta-text {
+  padding-left: 6px;
+}
+.cta-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  display: grid;
+  place-items: center;
+}
+.cta-circle img {
+  width: 18px;
+  height: 18px;
+  filter: invert(1);
+}
+
+/* Контейнер, как у инпутов: светлый, скруглённый, "чип" */
+.onb-gender {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-radius: 28px; /* важная форма */
+  background: rgba(255, 255, 255, 0.82); /* как у onb-input */
+  margin-top: 14px;
+}
+
+/* надпись "Ваш пол" — как плейсхолдер */
+.onb-gender-label {
+  color: rgba(0, 0, 0, 0.48);
+  font-size: 10px;
+  padding-left: 6px;
+}
+
+/* группа кнопок справа */
+.onb-gender .segmented {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+/* сами кнопки — тёмные "таблетки" */
+.seg {
+  appearance: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  padding: 7px 15px;
+  min-width: 0px; /* чтобы ширина была как на макете */
+  border-radius: 9999px;
+  background: #1a1717;
+  color: #fff;
+  font-weight: 400;
+  font-size: 10px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+}
+.seg:active {
+  transform: translateY(1px);
+}
+
+/* выбранная — кислотно-зелёная */
+:root {
+  --lime: #f3ff5a;
+} /* если у тебя уже есть — можно не дублировать */
+.seg.active {
+  background: var(--lime);
+  color: #000;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+/* Список целей */
+.goal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 6px 0 18px;
+}
+
+/* Таблетка варианта */
+.goal-pill {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 56px;
+  background: #383838; /* тёмная как на макете */
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+}
+.goal-pill:active {
+  transform: translateY(1px);
+}
+
+/* Иконка-квадратик слева */
+.goal-icon {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  display: grid;
+  place-items: center;
+  color: #fff; /* цвет галочки по умолчанию */
+}
+.goal-text {
+  line-height: 1.15;
+  font-size: 15px;
+  font-weight: 200;
+}
+
+/* Выбранная — кислотно-зелёная */
+:root {
+  --lime: #f3ff5a;
+} /* если уже есть — дубликат не критичен */
+.goal-pill.selected {
+  background: var(--lime);
+  color: #000;
+}
+.goal-pill.selected .goal-icon {
+  background: #000; /* чёрный квадратик на лайме */
+  border-color: #000;
+  color: #fff; /* белая галочка */
+}
+
+/* Кнопка "Далее" отключена — подсерим чуть */
+.cta-lime:disabled {
+  filter: grayscale(0.35) brightness(0.96);
+  cursor: not-allowed;
+  opacity: 0.95;
+}
+
+/* список для одиночного выбора */
+.choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 6px 0 22px;
+}
+
+/* таблетка без галочек */
+.choice-pill {
+  width: 100%;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 22px;
+  background: #3a3a3a; /* тёмная как на макете */
+  color: #fff;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.06s ease;
+  box-shadow: inset 0 -1px rgba(255, 255, 255, 0.06);
+}
+.choice-pill:active {
+  transform: translateY(1px);
+}
+
+.choice-text {
+  width: 100%;
+}
+.choice-title {
+  font-size: 14.5px;
+  line-height: 1.2;
+}
+.choice-hint {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* выбранная — кислотно-зелёная */
+:root {
+  --lime: #f3ff5a;
+} /* если уже определена — дубль не страшен */
+.choice-pill.selected {
+  background: var(--lime);
+  color: #000;
+}
+.choice-pill.selected .choice-hint {
+  opacity: 0.9;
+}
+
+/* "Свой вариант" в виде таблетки с инпутом */
+.custom-pill {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #3a3a3a;
+  color: #fff;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.custom-pill .goal-icon {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  display: grid;
+  place-items: center;
+}
+.custom-input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: none;
+  font-size: 14.5px;
+  color: inherit;
+}
+.custom-input::placeholder {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* выбранный кастом — как у goal-pill.selected */
+:root {
+  --lime: #f3ff5a;
+}
+.custom-pill.selected {
+  background: var(--lime);
+  color: #000;
+}
+.custom-pill.selected .goal-icon {
+  background: #000;
+  border-color: #000;
+  color: #fff;
+}
+.custom-pill.selected .custom-input::placeholder {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* === Loading === */
+.loading-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: #1f1f1f;
+  color: #fff;
+  text-align: center;
+  padding-top: 56px;
+}
+.loading-logo {
+  height: 24px;
+  margin-bottom: 48px;
+}
+.loading-percent {
+  font-size: 48px;
+  font-weight: 800;
+  color: #f3ff5a;
+  margin-bottom: 10px;
+}
+.loading-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+.loading-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.loading-list li {
+  opacity: 0.35;
+  font-size: 14.5px;
+}
+.loading-list li.active {
+  opacity: 1;
+  color: #f3ff5a;
+}
+.loading-list li.done {
+  opacity: 0.75;
+}
+
+/* === Profile === */
+.profile-screen {
+  min-height: 100vh;
+  background: #0f0f0f;
+  color: #fff;
+  padding: 18px 16px 40px;
+}
+.profile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.ph-left {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #222;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ph-name {
+  font-weight: 800;
+  font-size: 18px;
+}
+.ph-phone {
+  opacity: 0.7;
+  font-size: 13px;
+}
+.ph-edit {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.profile-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 14px;
+  margin-top: 12px;
+  backdrop-filter: blur(12px);
+}
+.profile-card h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  opacity: 0.85;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #222;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 13px;
+}
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 8px 12px;
+  border-radius: 10px;
+}
