@@ -9,14 +9,10 @@
   },
   "scripts": {
     "dev": "nodemon src/index.js",
-    "prisma:generate": "prisma generate",
-    "prisma:deploy": "prisma migrate deploy",
-    "postinstall": "prisma generate",
     "start": "node src/index.js"
   },
   "dependencies": {
-    "@prisma/client": "5.12.1",
-    "prisma": "5.12.1",
+    "@neondatabase/serverless": "^0.10.2",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

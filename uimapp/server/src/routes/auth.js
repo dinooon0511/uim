@@ -1,20 +1,20 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const { sql } = require('../db');
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
 const registerSchema = z.object({
-  phone: z.string().min(10),
+  phone: z.string().min(6),
   username: z.string().min(2),
   password: z.string().min(8),
 });
 
 const loginSchema = z.object({
-  phone: z.string().min(10),
+  phone: z.string().min(6),
   password: z.string().min(8),
 });
 
@@ -23,8 +23,8 @@ function issueToken(res, userId) {
   const isProd = process.env.NODE_ENV === 'production';
   res.cookie(process.env.COOKIE_NAME || 'uim_token', token, {
     httpOnly: true,
-    sameSite: isProd ? 'none' : 'lax', // для кросс-доменных запросов нужен none
-    secure: isProd, // на https — обязательно true
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 }
@@ -32,35 +32,39 @@ function issueToken(res, userId) {
 router.post('/register', async (req, res) => {
   try {
     const data = registerSchema.parse(req.body);
-    const passwordHash = await bcrypt.hash(data.password, 12);
-    const user = await prisma.user.create({
-      data: {
-        phone: data.phone,
-        username: data.username,
-        passwordHash,
-        profile: { create: {} },
-      },
-    });
-    issueToken(res, user.id);
-    return res.status(201).json({ ok: true });
+    const exist = await sql`
+      SELECT id FROM users WHERE phone = ${data.phone} OR username = ${data.username} LIMIT 1
+    `;
+    if (exist.length) return res.status(400).json({ error: 'phone or username already exists' });
+
+    const id = crypto.randomUUID();
+    const hash = await bcrypt.hash(data.password, 12);
+    await sql`
+      INSERT INTO users (id, phone, username, password_hash)
+      VALUES (${id}, ${data.phone}, ${data.username}, ${hash})
+    `;
+    await sql`INSERT INTO profiles (user_id) VALUES (${id})`;
+    issueToken(res, id);
+    res.status(201).json({ ok: true });
   } catch (e) {
     console.error(e);
-    return res.status(400).json({ error: e?.message || 'bad request' });
+    res.status(400).json({ error: e?.message || 'bad request' });
   }
 });
 
 router.post('/login', async (req, res) => {
   try {
     const data = loginSchema.parse(req.body);
-    const user = await prisma.user.findUnique({ where: { phone: data.phone } });
-    if (!user) return res.status(400).json({ error: 'user not found' });
-    const ok = await bcrypt.compare(data.password, user.passwordHash);
+    const rows = await sql`SELECT id, password_hash FROM users WHERE phone = ${data.phone} LIMIT 1`;
+    if (!rows.length) return res.status(400).json({ error: 'user not found' });
+    const user = rows[0];
+    const ok = await bcrypt.compare(data.password, user.password_hash);
     if (!ok) return res.status(400).json({ error: 'wrong password' });
     issueToken(res, user.id);
-    return res.json({ ok: true });
+    res.json({ ok: true });
   } catch (e) {
     console.error(e);
-    return res.status(400).json({ error: e?.message || 'bad request' });
+    res.status(400).json({ error: e?.message || 'bad request' });
   }
 });
 
