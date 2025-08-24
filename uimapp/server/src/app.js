@@ -33,6 +33,8 @@ const corsOptions = {
 app.use(helmet());
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: false })); // form-urlencoded
+app.use(express.text({ type: 'text/plain' }));
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // префлайт
 // поднимем таблицы, если их ещё нет (выполнится на холодном старте)
